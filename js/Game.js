@@ -6,6 +6,8 @@ function Game() {
     this.init();
     // 实例化Snake类
     this.snake = new Snake();
+    // 实例化食物类
+    this.food = new Food(this);
     // 执行定时器任务
     this.start();
     // 键盘的事件监听
@@ -45,8 +47,15 @@ Game.prototype.setColor = function (row, col, color) {
     this.dom.getElementsByTagName("tr")[row].getElementsByTagName("td")[col].style.background = color;
 };
 
+// 渲染食物
+Game.prototype.setHTML = function (row, col, html) {
+    this.dom.getElementsByTagName("tr")[row].getElementsByTagName("td")[col].innerHTML = html;
+
+};
+
 // 设置键盘的事件监听
 Game.prototype.bindEvent = function () {
+    // 声明self来备份this的原因：document指向window
     var self = this;
     // 键盘事件
     document.onkeydown = function (event) {
@@ -85,5 +94,7 @@ Game.prototype.start = function () {
         game.snake.update();
         // 蛇的渲染
         game.snake.render();
+        // 食物的渲染
+        game.food.render();
     }, 500);
 }
