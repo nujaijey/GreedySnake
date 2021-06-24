@@ -55,7 +55,7 @@ Game.prototype.setHTML = function (row, col, html) {
 
 // 设置键盘的事件监听
 Game.prototype.bindEvent = function () {
-    // 声明self来备份this的原因：document指向window
+    // 声明self来备份this的原因：document对象的this指向window
     var self = this;
     // 键盘事件
     document.onkeydown = function (event) {
