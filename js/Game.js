@@ -2,6 +2,8 @@ function Game() {
     // 行数和列数
     this.row = 20;
     this.col = 20;
+    // 分数
+    this.score = 0;
     // 初始化节点
     this.init();
     // 实例化Snake类
@@ -37,6 +39,7 @@ Game.prototype.clear = function () {
     for (var i = 0; i < this.row; i++) {
         for (var j = 0; j < this.col; j++) {
             this.dom.getElementsByTagName("tr")[i].getElementsByTagName("td")[j].style.background = "white";
+            this.dom.getElementsByTagName("tr")[i].getElementsByTagName("td")[j].innerHTML = "";
         }
     }
 };
@@ -86,15 +89,28 @@ Game.prototype.bindEvent = function () {
 };
 
 Game.prototype.start = function () {
+    // 帧编号
+    this.f = 0;
     this.timer = setInterval(function () {
         // 定时器里面的核心就是游戏的渲染本质，清屏-更新-渲染
         // 清除屏幕
+        game.f++;
+        // 渲染帧编号
+        document.getElementById("f").innerHTML = "帧编号：" + game.f;
+        // 渲染分数
+        document.getElementById("score").innerHTML = "分数：" + game.score;
         game.clear();
+        // 蛇的速度更新（蛇变长，速度加快）
+        // 说明：game.snake.body.length初始值为4，during为26，f为1
+        // 1%26不等于0，结果返回为false，f++，直到为true时才update（即为向前运动），此次update用时26*20ms
+        var during = game.snake.body.length < 30 ? 30 - game.snake.body.length : 1;
         // 蛇的更新（运动）
-        game.snake.update();
+        // 只要“&&”前面是false，无论“&&”后面是true还是false，结果都将返“&&”前面的值
+        // 只要“&&”前面是true，无论“&&”后面是true还是false，结果都将返“&&”后面的值
+        game.f % during == 0 && game.snake.update();
         // 蛇的渲染
         game.snake.render();
         // 食物的渲染
         game.food.render();
-    }, 500);
+    }, 20);
 }
